@@ -12,7 +12,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 public class MultiThreadingApplicationTests {
 
 
-    void startThreads(ThreadPoolTaskExecutor taskExecutor, CountDownLatch countDownLatch, int numThreads) {
+    void startTasks(ThreadPoolTaskExecutor taskExecutor, CountDownLatch countDownLatch, int numThreads) {
         for (int i = 0; i < numThreads; i++) {
             taskExecutor.execute(() -> {
                 try {
@@ -31,7 +31,7 @@ public class MultiThreadingApplicationTests {
         taskExecutor.afterPropertiesSet();
 
         CountDownLatch countDownLatch = new CountDownLatch(10);
-        this.startThreads(taskExecutor, countDownLatch, 10);
+        this.startTasks(taskExecutor, countDownLatch, 10);
 
         while (countDownLatch.getCount() > 0) {
             Assert.assertEquals(1, taskExecutor.getPoolSize());
@@ -45,7 +45,7 @@ public class MultiThreadingApplicationTests {
         taskExecutor.afterPropertiesSet();
 
         CountDownLatch countDownLatch = new CountDownLatch(10);
-        this.startThreads(taskExecutor, countDownLatch, 10);
+        this.startTasks(taskExecutor, countDownLatch, 10);
 
         while (countDownLatch.getCount() > 0) {
             Assert.assertEquals(5, taskExecutor.getPoolSize());
@@ -60,7 +60,7 @@ public class MultiThreadingApplicationTests {
         taskExecutor.afterPropertiesSet();
 
         CountDownLatch countDownLatch = new CountDownLatch(10);
-        this.startThreads(taskExecutor, countDownLatch, 10);
+        this.startTasks(taskExecutor, countDownLatch, 10);
 
         while (countDownLatch.getCount() > 0) {
             Assert.assertEquals(5, taskExecutor.getPoolSize());
@@ -76,7 +76,7 @@ public class MultiThreadingApplicationTests {
         taskExecutor.afterPropertiesSet();
 
         CountDownLatch countDownLatch = new CountDownLatch(10);
-        this.startThreads(taskExecutor, countDownLatch, 10);
+        this.startTasks(taskExecutor, countDownLatch, 10);
 
         while (countDownLatch.getCount() > 0) {
             Assert.assertEquals(10, taskExecutor.getPoolSize());
@@ -86,16 +86,25 @@ public class MultiThreadingApplicationTests {
     @Test
     public void whenCorePoolSizeFiveAndMaxPoolSizeTenAndQueueCapacityTen_thenTenThreads() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(5);
-        taskExecutor.setMaxPoolSize(10);
-        taskExecutor.setQueueCapacity(10);
+        int corePool = 5;
+        int maxPool = 10;
+        int queueCap = 10;
+        int numTasks = 20;
+        taskExecutor.setCorePoolSize(corePool);
+        taskExecutor.setMaxPoolSize(maxPool);
+        taskExecutor.setQueueCapacity(queueCap);
         taskExecutor.afterPropertiesSet();
 
-        CountDownLatch countDownLatch = new CountDownLatch(20);
-        this.startThreads(taskExecutor, countDownLatch, 20);
-
+        CountDownLatch countDownLatch = new CountDownLatch(numTasks);
+        this.startTasks(taskExecutor, countDownLatch, numTasks);
+        
+        System.out.println("taskExecutor.setCorePoolSize("+String.valueOf(corePool)+")");
+        System.out.println("taskExecutor.setMaxPoolSize("+String.valueOf(maxPool)+")");
+        System.out.println("taskExecutor.setQueueCapacity("+String.valueOf(queueCap)+")");
+        System.out.println("Number of Task: "+ numTasks);
+        System.out.println("taskExecutor.getPoolSize() : " + taskExecutor.getPoolSize());
         while (countDownLatch.getCount() > 0) {
-            Assert.assertEquals(10, taskExecutor.getPoolSize());
+            Assert.assertEquals((numTasks - queueCap), taskExecutor.getPoolSize());
         }
     }
 
