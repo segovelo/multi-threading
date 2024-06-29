@@ -87,23 +87,36 @@ public class MultiThreadingApplicationTests {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         int corePool = 5;
         int maxPool = 10;
-        int queueCap = 10;
-        int numTasks = 20;
+        int queueCap = 6;
+        int numTasks = 4;
         taskExecutor.setCorePoolSize(corePool);
         taskExecutor.setMaxPoolSize(maxPool);
         taskExecutor.setQueueCapacity(queueCap);
         taskExecutor.afterPropertiesSet();
-
         CountDownLatch countDownLatch = new CountDownLatch(numTasks);
-        this.startTasks(taskExecutor, countDownLatch, numTasks);
-        
+        this.startTasks(taskExecutor, countDownLatch, numTasks);       
         System.out.println("taskExecutor.setCorePoolSize("+String.valueOf(corePool)+")");
         System.out.println("taskExecutor.setMaxPoolSize("+String.valueOf(maxPool)+")");
         System.out.println("taskExecutor.setQueueCapacity("+String.valueOf(queueCap)+")");
         System.out.println("Number of Task: "+ numTasks);
         System.out.println("taskExecutor.getPoolSize() : " + taskExecutor.getPoolSize());
         while (countDownLatch.getCount() > 0) {
+<<<<<<< HEAD
            assertEquals((numTasks - queueCap), taskExecutor.getPoolSize());
+=======
+        	int numThreads = 0;
+        	if((numTasks - queueCap) > 0) {
+        		if((numTasks - queueCap) >= maxPool)
+        			numThreads = maxPool;
+        		else if (numTasks - queueCap > corePool) 
+        				numThreads = (numTasks - queueCap);
+        					else numThreads = corePool;
+        	}
+        	else if (numTasks >= corePool) 
+        			numThreads = corePool;
+        				else numThreads = numTasks;
+            Assert.assertEquals(numThreads, taskExecutor.getPoolSize());
+>>>>>>> branch 'main' of https://github.com/segovelo/multi-threading.git
         }
     }
 
