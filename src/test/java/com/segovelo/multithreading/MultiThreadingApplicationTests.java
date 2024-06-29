@@ -1,11 +1,10 @@
 package com.segovelo.multithreading;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
-
-import org.junit.Assert;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @SpringBootTest
@@ -34,7 +33,7 @@ public class MultiThreadingApplicationTests {
         this.startTasks(taskExecutor, countDownLatch, 10);
 
         while (countDownLatch.getCount() > 0) {
-            Assert.assertEquals(1, taskExecutor.getPoolSize());
+            assertEquals(1, taskExecutor.getPoolSize());
         }
     }
 
@@ -48,7 +47,7 @@ public class MultiThreadingApplicationTests {
         this.startTasks(taskExecutor, countDownLatch, 10);
 
         while (countDownLatch.getCount() > 0) {
-            Assert.assertEquals(5, taskExecutor.getPoolSize());
+            assertEquals(5, taskExecutor.getPoolSize());
         }
     }
 
@@ -63,7 +62,7 @@ public class MultiThreadingApplicationTests {
         this.startTasks(taskExecutor, countDownLatch, 10);
 
         while (countDownLatch.getCount() > 0) {
-            Assert.assertEquals(5, taskExecutor.getPoolSize());
+            assertEquals(5, taskExecutor.getPoolSize());
         }
     }
 
@@ -79,7 +78,7 @@ public class MultiThreadingApplicationTests {
         this.startTasks(taskExecutor, countDownLatch, 10);
 
         while (countDownLatch.getCount() > 0) {
-            Assert.assertEquals(10, taskExecutor.getPoolSize());
+            assertEquals(10, taskExecutor.getPoolSize());
         }
     }
 
@@ -104,7 +103,7 @@ public class MultiThreadingApplicationTests {
         System.out.println("Number of Task: "+ numTasks);
         System.out.println("taskExecutor.getPoolSize() : " + taskExecutor.getPoolSize());
         while (countDownLatch.getCount() > 0) {
-            Assert.assertEquals((numTasks - queueCap), taskExecutor.getPoolSize());
+           assertEquals((numTasks - queueCap), taskExecutor.getPoolSize());
         }
     }
 

@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.4.2'
+	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.0'
 }
 
@@ -13,10 +13,32 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter:3.3.0'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.3.0'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+// task method to duplicate jar files generated when "gradle clean build" 
+// Use this to pass file name as arg -> gradle clean build -ParchiveName=custom-archive-name
+
+task copyJars (type: Copy) {
+	dependsOn bootJar
+	String archiveName = "";
+	if (project.hasProperty("archiveName")){
+		archiveName = project.getProperty("archiveName")
+	} else{
+		archiveName = "default-custom-name"
+	}	
+	from bootJar
+	into "$project.buildDir/libs"
+	rename "multi-threading-0.0.1-SNAPSHOT.jar", "${archiveName}.jar" 
+	from jar
+	into "$project.buildDir/libs"
+	rename "multi-threading-0.0.1-SNAPSHOT-plain.jar", "${archiveName}-plain.jar"
+}
+
+build.dependsOn(copyJars)
