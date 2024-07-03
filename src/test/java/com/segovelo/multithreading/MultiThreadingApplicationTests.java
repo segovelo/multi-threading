@@ -101,9 +101,7 @@ public class MultiThreadingApplicationTests {
         System.out.println("Number of Task: "+ numTasks);
         System.out.println("taskExecutor.getPoolSize() : " + taskExecutor.getPoolSize());
         while (countDownLatch.getCount() > 0) {
-<<<<<<< HEAD
-           assertEquals((numTasks - queueCap), taskExecutor.getPoolSize());
-=======
+           //assertEquals((numTasks - queueCap), taskExecutor.getPoolSize());
         	int numThreads = 0;
         	if((numTasks - queueCap) > 0) {
         		if((numTasks - queueCap) >= maxPool)
@@ -115,8 +113,8 @@ public class MultiThreadingApplicationTests {
         	else if (numTasks >= corePool) 
         			numThreads = corePool;
         				else numThreads = numTasks;
-            Assert.assertEquals(numThreads, taskExecutor.getPoolSize());
->>>>>>> branch 'main' of https://github.com/segovelo/multi-threading.git
+            assertEquals(numThreads, taskExecutor.getPoolSize());
+
         }
     }
 
